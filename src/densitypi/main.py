@@ -22,11 +22,13 @@ class MainHandler(tornado.web.RequestHandler):
         devices = api.devices.list()
         self.write(loader.load("index.html").generate(devices=devices['data']['devices'], alerts=alerts['data']['alerts']))
 
-static_path = os.path.join(os.path.dirname(__file__), '..', 'static')
-application = tornado.web.Application([
-    (r"/", MainHandler),
-], static_path=static_path)
+def run():
+    static_path = os.path.join(os.path.dirname(__file__), '../..', 'static')
+    application = tornado.web.Application([
+        (r"/", MainHandler),
+    ], static_path=static_path)
+    application.listen(8001)
+    tornado.ioloop.IOLoop.instance().start()
 
 if __name__ == "__main__":
-    application.listen(8081)
-    tornado.ioloop.IOLoop.instance().start()
+    run()
